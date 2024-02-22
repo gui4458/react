@@ -17,7 +17,11 @@ function App() {
   let [title, setTitle] = useState(['리액트 학습','울산 맛집', '겨울 코드 추천']);
   let [likeCnt, setLikeCnt] = useState([0,0,0]);
   let [isShow, setIsShow] = useState(false);
+  
+  // input 태그에 입력한 값을 저장하고 있는 state 변수
+  let [newTitle, setNewTitle] = useState('')
 
+  const list = document.querySelector('.list')
   return (
     <div className="App">
       <div className='black-nav'>
@@ -34,11 +38,29 @@ function App() {
       {
       title.map((e , i) => {
         return(
-          <List key={i} title={e} likeCnt={likeCnt} idx={i} setLikeCnt={setLikeCnt} setIsShow={setIsShow}/>
+          
+          <List key={i} title={e} likeCnt={likeCnt} idx={i} setLikeCnt={setLikeCnt} setIsShow={setIsShow} setTitle={setTitle} titles={title}/>
           
         );
       })
       }
+
+      <div>
+        <input type='text' onChange={(e)=>{
+          // input 태그에 입력한 값을 출력
+          setNewTitle(e.target.value)
+          
+        }}/>
+        <input type='button' value={'등록'} onClick={() => {
+          let copyTitle = [...title];
+          copyTitle.unshift(newTitle) 
+          setTitle(copyTitle)
+            
+        
+          
+        }}/>
+      </div>
+
       {
         isShow ? <Detail/> : ''
       }
@@ -55,7 +77,8 @@ function List(props){
         <h4><span onClick={()=>{
           
           props.setIsShow(true);
-        }}>{props.title}</span><span onClick={()=>{
+        }}>{props.title}</span>
+        {/* <span onClick={()=>{
           // let copyLikeCnt = [...props.likeCnt];
           // copyLikeCnt[props.idx]++;
           // props.setLikeCnt(copyLikeCnt);
@@ -66,8 +89,15 @@ function List(props){
 
 
 
-        }}>👍</span> {props.likeCnt[props.idx]} </h4>
+        }}>👍</span> {props.likeCnt[props.idx]}  */}
+        </h4>
         <p>2월 19일 작성</p>
+        <p><button type='button' onClick={(e)=>{
+          let copyTitle = [...props.titles];
+          copyTitle.splice(props.idx,1);
+          props.setTitle(copyTitle)
+          
+        }}>삭제</button></p>
     </div>
   );
 }
